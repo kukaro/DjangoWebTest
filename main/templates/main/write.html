@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Write{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form|linebreaks }}
+        <input type="submit">
+    </form>
+{% endblock %}

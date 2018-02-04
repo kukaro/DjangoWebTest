@@ -23,3 +23,9 @@ class UserRegisterForm(forms.Form):
     pw_hash = forms.CharField(label='password', max_length=128)
     pw_hash_verify = forms.CharField(label='password verify', max_length=128)
     pnt = forms.IntegerField(label='point')
+
+
+class ArticleWriteForm(forms.Form):
+    title = forms.CharField(label='title', max_length=30)
+    content = forms.CharField(widget=forms.Textarea)
+    author = forms.CharField(label='author', max_length=30)

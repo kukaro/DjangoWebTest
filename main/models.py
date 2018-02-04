@@ -27,6 +27,7 @@ class NavigationGroup(models.Model):
 
 
 class NavigationItem(models.Model):
+    id = models.CharField(max_length=30, primary_key=True, null=False)
     name = models.CharField(max_length=30, null=False)
     group = models.OneToOneField(
         NavigationGroup,
@@ -38,7 +39,7 @@ class NavigationItem(models.Model):
 
 
 class Board(NavigationItem):
-    counter = models.IntegerField()
+    counter = models.IntegerField(default=0.0, null=False)
 
 
 class Article(models.Model):

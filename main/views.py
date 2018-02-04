@@ -3,7 +3,8 @@ from django.shortcuts import render
 from django.views.generic import View
 from .forms import CustomUserCreationForm
 from .forms import UserRegisterForm
-from .models import CustomUser
+from .forms import ArticleWriteForm
+from .models import CustomUser, Article, Board
 
 
 # Create your views here.
@@ -31,6 +32,33 @@ class Register(View):
                 )
                 obj.save()
             except Exception:
+                return HttpResponse('exception')
+
+            return HttpResponse('success')
+        return HttpResponse('fail')
+
+
+class Write(View):
+    form_class = ArticleWriteForm
+    template_name = 'main/write.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            try:
+                obj = Article(
+                    board=Board.objects.get(pk=kwargs['bid']),
+                    title=form.data['title'],
+                    content=form.data['content'],
+                    author=CustomUser.objects.get(pk=form.data['author']),
+                )
+                obj.save()
+            except Exception as e:
+                print(e)
                 return HttpResponse('exception')
 
             return HttpResponse('success')
