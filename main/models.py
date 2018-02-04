@@ -19,3 +19,41 @@ class CustomUser(AbstractUser):
     pw_reset_time = models.DateTimeField(default=now, null=False)
     unregistered = models.DateTimeField(null=True)
     objects = CustomUserManager()
+
+
+class NavigationGroup(models.Model):
+    name = models.CharField(max_length=30, null=False)
+    priority = models.FloatField(default=0.0, null=False)
+
+
+class NavigationItem(models.Model):
+    name = models.CharField(max_length=30, null=False)
+    group = models.OneToOneField(
+        NavigationGroup,
+        on_delete=models.CASCADE,
+    )
+    created = models.DateTimeField(default=now, null=False)
+    hidden = models.BooleanField(default=False, null=False)
+    priority = models.FloatField(default=0.0, null=False)
+
+
+class Board(NavigationItem):
+    counter = models.IntegerField()
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=128)
+    content = models.CharField(max_length=10000)
+    board = models.OneToOneField(
+        Board,
+        on_delete=models.CASCADE,
+    )
+    author = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+    )
+    created = models.DateTimeField(default=now, null=False)
+    modified = models.DateTimeField(default=now, null=False)
+    upvote = models.IntegerField(default=0, null=False)
+    downvote = models.IntegerField(default=0, null=False)
+    hidden = models.BooleanField(default=False, null=False)
